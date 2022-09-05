@@ -69,7 +69,11 @@ oddFactorial x
 -- * https://en.wikipedia.org/wiki/Euclidean_algorithm
 
 myGcd :: Integer -> Integer -> Integer
-myGcd = todo
+myGcd x y
+  | x == 0 = y
+  | y == 0 = x
+  | y > x = myGcd x (y - x)
+  | otherwise = myGcd (x - y) y
 
 ------------------------------------------------------------------------------
 -- Ex 4: Implement the function leftpad which adds space characters
@@ -87,7 +91,9 @@ myGcd = todo
 -- * you can compute the length of a string with the length function
 
 leftpad :: String -> Int -> String
-leftpad = todo
+leftpad str x
+  | length str >= x = str
+  | otherwise = leftpad (" " ++ str) x
 
 ------------------------------------------------------------------------------
 -- Ex 5: let's make a countdown for a rocket! Given a number, you
@@ -106,7 +112,14 @@ leftpad = todo
 -- * you'll probably need a recursive helper function
 
 countdown :: Integer -> String
-countdown = todo
+countdown n = "Ready! " ++ countdown' n "" ++ "Liftoff!"
+
+countdown' :: Integer -> String -> String
+countdown' n str
+  | n == 1 = f 1
+  | otherwise = countdown' (n - 1) (f n)
+  where
+    f x = str ++ show x ++ "... "
 
 ------------------------------------------------------------------------------
 -- Ex 6: implement the function smallestDivisor that returns the
@@ -124,7 +137,13 @@ countdown = todo
 -- Hint: remember the mod function!
 
 smallestDivisor :: Integer -> Integer
-smallestDivisor = todo
+smallestDivisor x = smallestDivisor' x 2
+
+smallestDivisor' :: Integral t => t -> t -> t
+smallestDivisor' num x
+  | num `mod` x == 0 = x
+  | x == num `div` 2 = num
+  | otherwise = smallestDivisor' num (x + 1)
 
 ------------------------------------------------------------------------------
 -- Ex 7: implement a function isPrime that checks if the given number
@@ -133,7 +152,10 @@ smallestDivisor = todo
 -- Ps. 0 and 1 are not prime numbers
 
 isPrime :: Integer -> Bool
-isPrime = todo
+isPrime x
+  | x == 0 || x == 1 = False
+  | smallestDivisor x == x = True
+  | otherwise = False
 
 ------------------------------------------------------------------------------
 -- Ex 8: implement a function biggestPrimeAtMost that returns the
@@ -148,4 +170,7 @@ isPrime = todo
 --   biggestPrimeAtMost 10 ==> 7
 
 biggestPrimeAtMost :: Integer -> Integer
-biggestPrimeAtMost = todo
+biggestPrimeAtMost x
+  | x < 2 = x
+  | isPrime x = x
+  | otherwise = biggestPrimeAtMost (x - 1)
